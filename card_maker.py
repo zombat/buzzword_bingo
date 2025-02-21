@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import argparse
+import cairosvg
 import json
+import os
 import random
 import svgwrite
 
@@ -21,7 +23,9 @@ def generate_card(buzzwords, card_id, height, width, free_space=True, cell_width
     # Create the SVG drawing with validation disabled.
     total_width = width * cell_width
     total_height = height * cell_height
-    dwg = svgwrite.Drawing(f'bingo_card_{card_id}.svg', size=(total_width, total_height), profile='tiny', debug=False)
+    svg_filename = f'bingo_card_{card_id}.svg'
+    png_filename = f'bingo_card_{card_id}.png'
+    dwg = svgwrite.Drawing(svg_filename, size=(total_width, total_height), profile='tiny', debug=False)
 
     # Draw the outer rectangle (optional)
     dwg.add(dwg.rect(insert=(0, 0), size=(total_width, total_height),
@@ -50,6 +54,11 @@ def generate_card(buzzwords, card_id, height, width, free_space=True, cell_width
                              font_size="14px",
                              fill="black"))
     dwg.save()
+
+    # Convert the SVG to PNG
+    cairosvg.svg2png(url=svg_filename, write_to=png_filename)
+    # Remove the SVG file
+    os.remove(svg_filename)
 
 if __name__ == "__main__":
     # Initialize argument parser
