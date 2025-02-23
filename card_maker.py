@@ -15,7 +15,9 @@ def generate_card(buzzwords, card_id, height, width, free_space=True, cell_width
         required_buzzwords = height * width
 
     if len(buzzwords) < required_buzzwords:
-        raise ValueError('Not enough buzzwords to generate a card of this size')
+        print(f'Error: Not enough buzzwords to generate a card of this size. Needed {required_buzzwords}, got {len(buzzwords)}.')
+        print('Please add more buzzwords to the buzzwords.json file, consider adding more categories, or reduce the size of the card.')
+        exit(1)
 
     # Randomly sample the buzzwords needed.
     random_buzzwords = random.sample(buzzwords, required_buzzwords)
@@ -83,7 +85,7 @@ if __name__ == "__main__":
         print('Available categories:')
         for category in available_categories:
             print(f'  - {category}')
-        exit(0)
+            exit(0)
     elif args.categories:
         # Fail if any requested category is not available and show available categories
         for category in args.categories:
@@ -92,10 +94,14 @@ if __name__ == "__main__":
                 for category in available_categories:
                     print(f'  - {category}')
                 exit(1)
-            buzzwords = [buzzword for category in args.categories for buzzword in buzzwords[category]]
+        buzzwords = [buzzword for category in args.categories for buzzword in buzzwords[category]]
+       
     else:
         # Use all categories if none are specified
         buzzwords = [buzzword for category in available_categories for buzzword in buzzwords[category]]
+    
+    # Convert buzzwords to a list
+    buzzwords = list(buzzwords)
     
     # Generate a 5x5 bingo card with larger dimensions
     for i in range(args.quantity):
