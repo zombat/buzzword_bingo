@@ -83,7 +83,7 @@ if __name__ == "__main__":
         print('Available categories:')
         for category in available_categories:
             print(f'  - {category}')
-            exit(0)
+        exit(0)
     elif args.categories:
         # Fail if any requested category is not available and show available categories
         for category in args.categories:
